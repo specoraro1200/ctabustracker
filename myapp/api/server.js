@@ -79,7 +79,6 @@ app.get('/BusRoute/:id', function(req, res) {
 });
 
 async function busRouteQueryandCache(req, res) {
-	var store = fetch('http://www.ctabustracker.com/bustime/api/v2/getroutes?key=Ph2VjWCh3hRRKyqERyPYdYLjs&format=json')
 
 	try {
 		con.query("select sum(dly = 1) as 'True',sum(dly=0) as 'False', vid from Buses where vid in (select vid from Buses where rt = '"+id+"') and tmstmp >= '" + store + "' group by vid", function (err, result, fields) {
