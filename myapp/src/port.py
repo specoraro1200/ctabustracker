@@ -5,10 +5,11 @@ import sys
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-rds_host  = "timelinessofctabuses9008.cfai3nm0tmno.us-east-1.rds.amazonaws.com"
-name = "nergigante5678"
-password = "2*sPq*EFf6MH7qUZxt2z"
-db_name = "CTA"
+rds_host  = print(os.environ['host'])
+name = print(os.environ['user'])
+password = print(os.environ['password'])
+db_name = print(os.environ['database'])
+
 try:
     conn = pymysql.connect(host=rds_host, user=name, passwd=password, db=db_name,connect_timeout = 5)
 except pymysql.MySQLError as e:
