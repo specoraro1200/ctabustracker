@@ -70,8 +70,8 @@ function BusRoute() {
             <Card.Title style={{fontSize:"30px"}}>Award for Most Late Bus</Card.Title>
               <h3>ID# {MostLateBus.vid}</h3>
               <ProgressBar>
-                <ProgressBar animated variant="danger" now={mostLateBusEfficient} label={`${mostLateBusEfficient}%`}  />
-                <ProgressBar animated variant="success" now={reverseMostLateBus} label={`${reverseMostLateBus}%`}  />
+                <ProgressBar animated variant="danger" now={reverseMostLateBus} label={`${reverseMostLateBus}%`}  />
+                <ProgressBar animated variant="success" now={mostLateBusEfficient} label={`${mostLateBusEfficient}%`}  />
               </ProgressBar>
           </Card>   
         </div>

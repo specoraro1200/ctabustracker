@@ -3,10 +3,10 @@ import pymysql
 import sys
 import os
 
-rds_host  = print(os.environ['host'])
-name = print(os.environ['user'])
-password = print(os.environ['password'])
-db_name = print(os.environ['database'])
+rds_host  = (os.environ['host'])
+name = (os.environ['user'])
+password = (os.environ['password'])
+db_name = (os.environ['database'])
 
 try:
     conn = pymysql.connect(host=rds_host, user=name, passwd=password, db=db_name,connect_timeout = 5)

@@ -2,17 +2,18 @@ const express = require("express")
 const cors = require("cors")
 var redis = require('redis');
 var mysql = require('mysql');
+require('dotenv').config({path:"/Users/scpec/busaccuracy/.env"});
+
 const app = express()
 app.use(cors())
 redisClosed = true
-
+console.log(process.env.HOST)
 var con = mysql.createConnection({
 	
-	host:process.env.host,
-	user:process.env.user,
-	port:process.env.port,
-	password:process.env.password,
-	database:process.env.database
+	host:process.env.HOST,
+	user:process.env.USER,
+	password:process.env.PASSWORD,
+	database:process.env.DATABASE
 
 });
 const client = redis.createClient({
@@ -31,7 +32,7 @@ async function connectToRedis(){
 
 
 client.on('connect',()=> {
-	console.log(client);
+	// console.log(client);
 });
 
 app.get("/", function(req, res){
@@ -51,10 +52,8 @@ app.get("/", function(req, res){
 async function frontPageQueryandCache(req, res) {
 	try {
 		con.query("select url,vid,name from Image", function (err, result, fields) {
-			if (err) connect();
-			console.log("BEFORE")
-			console.log(JSON.stringify(result))
-			client.setEx("Frontpage",60000,JSON.stringify(result))
+			if (err) console.log(err)
+			// client.setEx("Frontpage",60000,JSON.stringify(result))
 			res.send(result) 
 		});
 	} catch (err) {
@@ -73,17 +72,18 @@ app.get('/BusRoute/:id', function(req, res) {
 			res.send(result) 
 		} 
 		else{
-			busRouteQueryandCache(req,res)
+			busRouteQueryandCache(req,res,id)
 		}
 	});
 });
 
-async function busRouteQueryandCache(req, res) {
+async function busRouteQueryandCache(req, res,id) {
 
 	try {
-		con.query("select sum(dly = 1) as 'True',sum(dly=0) as 'False', vid from Buses where vid in (select vid from Buses where rt = '"+id+"') and tmstmp >= '" + store + "' group by vid", function (err, result, fields) {
-			if (err) connect();
-			client.set("BusRoute",60000,JSON.stringify(result))
+		con.query("select rt, sum(NoDelay) as NoDelay, sum(Delay) as Delay from Vehicles where rt = '"+id+"'", function (err, result, fields) {
+			if (err) console.log(err)
+			console.log(result)
+			// client.set("BusRoute",60000,JSON.stringify(result))
 			res.send(result) 
 		});
 	} catch (err) {
@@ -92,17 +92,34 @@ async function busRouteQueryandCache(req, res) {
 	}
 }
 
+app.get('/BusRoute/MostLateBus/:id', function(req, res) {
+	var id = req.params.id; 
+
+	try {
+		con.query("select vid, rt, (NoDelay/(Delay+NoDelay))*100 as Efficient from Vehicles where rt = '"+id+"' order by Efficient asc limit 1;", function (err, result, fields) {
+			if (err) console.log(err)
+			res.send(result) 
+		});
+	} catch (err) {
+		console.error(err);
+		res.status(500);
+	}
+});
+
+
+
 app.get("/delay", function(req, res) {
 		con.query("select (sum(dly) / count(dly)*100) as 'PercentLate', vid from Buses group by vid order by PercentLate;", function (err, result, fields) {
-		  if (err) connect();
+		  if (err) console.log(err)
 		});
 })
 
 
+
 app.listen(3000, () => {
-	console.log(client)
+	// console.log(client)
 	if(redisClosed){
 		connectToRedis()
 	}
-	console.log("app listening on port 3000")
+	console.log(process.env.HOST);
 })
