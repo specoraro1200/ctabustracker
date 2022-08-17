@@ -12,7 +12,6 @@ constructor(props){
 
 componentDidMount() {
     this.renderMyData();
-    // this.getDelay();
 }
 
 
@@ -59,7 +58,7 @@ render() {
         var busRouteNumber = "/BusRoute/" + value[1]
         var source = "https://www.transitchicago.com" + value[0]
         busCards.push(
-        <Card key = {value[1]} ref={this.myRefElement} style={{ width: '18rem' }}>
+        <Card  key = {value[1]} ref={this.myRefElement} style={{ width: '18rem' ,margin:"5px"}}>
             <a href = {busRouteNumber} >
                 <Card.Img href = {busRouteNumber} variant="top" src= {source} height="130"/>
             </a>   
@@ -79,8 +78,9 @@ render() {
 
     return (
     <Container id = "container" fluid >
-        <Row id = "row" className="justify-content-md-center">
+        <Row id = "row" style={{marginTop:"10rem"}} className="justify-content-md-center">
             {busCards}
+            
         </Row>
     </Container>
     )
