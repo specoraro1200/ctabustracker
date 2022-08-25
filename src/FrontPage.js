@@ -1,8 +1,9 @@
 import React from "react"
 import { Button, Card, Container, Row } from 'react-bootstrap'
 import { Route, Routes } from 'react-router-dom';
-export default class FrontPage extends React.Component {
+import {API, Auth} from 'aws-amplify'
 
+export default class FrontPage extends React.Component {
 constructor(props){
     super(props);
     this.state = {
@@ -10,25 +11,16 @@ constructor(props){
     };
 }
 
-componentDidMount() {
-    this.renderMyData();
-    // this.getDelay();
-}
-
-
-renderMyData(){
-    fetch(
-        "http://localhost:3000/")
-        .then((res) => res.json())
-        .then((json) => {
-            console.log(json)
-            this.setState({
-                cta: json,
-            });
-        })
-        .catch((error) => {
-            console.error(error);
+async componentDidMount() {
+    try{
+        const data = await (API.get('BusAPI','/items'))
+        this.setState({
+            cta: data,
         });
+    }
+    catch{
+        console.log("ERROR")
+    }
 }
 
 // getDelay(){
@@ -47,6 +39,7 @@ render() {
 
     const elements = []
     var routes = this.state.cta
+    console.log(routes)
     if(this.state.cta){
         for(var i = 0; i < this.state.cta.length; i++){
             elements.push([routes[i].url,routes[i].vid,routes[i].name])

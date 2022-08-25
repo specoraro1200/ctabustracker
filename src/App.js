@@ -7,24 +7,18 @@ import { BrowserRouter } from 'react-router-dom'
 import React from "react"
 import { Route, Routes } from 'react-router-dom';
 import "./style.css";
-
+import {API, Auth} from 'aws-amplify'
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
 
 class App extends React.Component {
   state = {
     name: ""
   }
-
-  componentDidMount() {
-    // fetch("http://localhost:3000")
-    //   .then(res => res.json())
-    //   .then(data => this.setState({ name: data.name }))
-    // fetch("http://www.ctabustracker.com/bustime/api/v2/getpatterns?key=Ph2VjWCh3hRRKyqERyPYdYLjs&rt=20")
-    //   .then(res => res.json())
-    //   .then(data => console.log(data));
-  }
-
   render() {
+    async function callAPI(){
+      const data = await API.get('BusAPI','/items')
+      console.log("HI",{data})
+    }
     return (
       <BrowserRouter id = "body">
         <link rel="preconnect" href="https://fonts.googleapis.com"></link>
@@ -36,6 +30,7 @@ class App extends React.Component {
             <Route path="*" element={<FrontPage/>}/>
             <Route path="/BusRoute/:id" element={<BusRoute/>}/>
           </Routes>
+          <button onClick={callAPI}>BUTTON</button>
           <script src="https://unpkg.com/react/umd/react.production.min.js" crossorigin></script>
           <script src="https://unpkg.com/react-dom/umd/react-dom.production.min.js" crossorigin></script>
           <script src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js" crossorigin></script>
