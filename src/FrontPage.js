@@ -13,7 +13,8 @@ constructor(props){
 
 async componentDidMount() {
     try{
-        const data = await (API.get('BusAPI','/items'))
+        const data = await (API.get('busAPI','/items'))
+        console.log(data)
         this.setState({
             cta: data,
         });

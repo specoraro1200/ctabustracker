@@ -15,10 +15,7 @@ class App extends React.Component {
     name: ""
   }
   render() {
-    async function callAPI(){
-      const data = await API.get('BusAPI','/items')
-      console.log("HI",{data})
-    }
+
     return (
       <BrowserRouter id = "body">
         <link rel="preconnect" href="https://fonts.googleapis.com"></link>
@@ -30,7 +27,6 @@ class App extends React.Component {
             <Route path="*" element={<FrontPage/>}/>
             <Route path="/BusRoute/:id" element={<BusRoute/>}/>
           </Routes>
-          <button onClick={callAPI}>BUTTON</button>
           <script src="https://unpkg.com/react/umd/react.production.min.js" crossorigin></script>
           <script src="https://unpkg.com/react-dom/umd/react-dom.production.min.js" crossorigin></script>
           <script src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js" crossorigin></script>
