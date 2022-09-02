@@ -19,8 +19,8 @@ async componentDidMount() {
             cta: data,
         });
     }
-    catch{
-        console.log("ERROR")
+    catch(error){
+        console.log(error)
     }
 }
 
@@ -72,11 +72,13 @@ render() {
     }
 
     return (
-    <Container id = "container" fluid >
-        <Row id = "row" className="justify-content-md-center">
-            {busCards}
-        </Row>
-    </Container>
+    <div>
+        <Container fluid >
+            <Row style = {{justifyContent:"center"}} >
+                {busCards}
+            </Row>
+        </Container>
+    </div>
     )
   }
 }

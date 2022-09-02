@@ -40,22 +40,20 @@ function BusRoute() {
         }
       )
       .catch(error => console.log(error));
+      const data2 = API.get('busAPI','/BusRoute/MostLate', {'queryStringParameters': {'id': id}})
+      .then(response => {
+          setMostLateBus(response[0])
+      })
+      .catch(error => console.log(error));
 
-      // fetch(
-      //   `http://localhost:3000/BusRoute/MostLateBus/${id}` ,
-      //   )
-      //   .then(res => res.json())
-      //   .then(response => {
-      //       setMostLateBus(response[0])
-      //   })
   },[]);
 
 
   busRouteEfficiency = (100-busRouteEfficiency).toFixed(1)
   var reverseBusRouteEfficiency = (100-busRouteEfficiency).toFixed(1)
 
-  // var mostLateBusEfficient = parseFloat(MostLateBus.Efficient).toFixed(1)
-  // var reverseMostLateBus = (100-mostLateBusEfficient).toFixed(1)
+  var mostLateBusEfficient = parseFloat(MostLateBus.Efficient).toFixed(1)
+  var reverseMostLateBus = (100-mostLateBusEfficient).toFixed(1)
   return (
     <div id = "body">
       <Container style = {{paddingTop:"1rem"}}>
@@ -67,14 +65,14 @@ function BusRoute() {
             <ProgressBar animated variant="danger" now={reverseBusRouteEfficiency} label={`${reverseBusRouteEfficiency}%`}  />
             <ProgressBar animated variant="success" now={busRouteEfficiency} label={`${busRouteEfficiency}%`} />
           </ProgressBar>
-          {/* <Card style={{ width: '75%' ,margin:"auto",marginTop:"1rem",padding:"1rem",paddingBottom:"1rem"}}> 
+          <Card style={{ width: '75%' ,margin:"auto",marginTop:"1rem",padding:"1rem",paddingBottom:"1rem"}}> 
             <Card.Title style={{fontSize:"30px"}}>Award for Most Late Bus</Card.Title>
               <h3>ID# {MostLateBus.vid}</h3>
               <ProgressBar>
                 <ProgressBar animated variant="danger" now={reverseMostLateBus} label={`${reverseMostLateBus}%`}  />
                 <ProgressBar animated variant="success" now={mostLateBusEfficient} label={`${mostLateBusEfficient}%`}  />
               </ProgressBar>
-          </Card>    */}
+          </Card>   
         </div>
         }
       </Container>
