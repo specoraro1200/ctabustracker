@@ -2,6 +2,7 @@ import React from "react"
 import { Button, Card, Container, Row } from 'react-bootstrap'
 import { Route, Routes } from 'react-router-dom';
 import {API, Auth} from 'aws-amplify'
+import Nav from 'react-bootstrap/Nav';
 
 export default class FrontPage extends React.Component {
 constructor(props){
@@ -38,6 +39,30 @@ async componentDidMount() {
 
 render() {
 
+    const SearchBarBus = () => (
+        <form action="/" method="get">
+            <input
+                type="text"
+                id="header-search"
+                placeholder="Search Bus ID"
+                name="s" 
+            />
+            <button type="submit">Search</button>
+        </form>
+    );
+
+    const SearchBarTrain = () => (
+        <form action="/" method="get">
+            <input
+                type="text"
+                id="header-search"
+                placeholder="Search Train ID"
+                name="s" 
+            />
+            <button type="submit">Search</button>
+        </form>
+    );
+
     const elements = []
     var routes = this.state.cta
     console.log(routes)
@@ -73,6 +98,29 @@ render() {
 
     return (
     <div>
+        <div  style={{display:"flex",flexDirection:"row",flexWrap:"nowrap",justifyContent:"center",marginTop:"1rem",marginBottom:"1rem"}}>
+        <Card >
+
+            <Card.Body>
+                <img src={require("./bus1.png")}></img>
+                <Card.Title>Bus ID Lookup</Card.Title>
+                <Card.Text>
+                Discover how terribly late or amazingly on time your bus is!
+                </Card.Text>
+                <SearchBarBus></SearchBarBus>
+            </Card.Body>
+        </Card>
+        <Card>
+            <Card.Body>
+                <img src={require("./train2.png")}></img>
+                <Card.Title>Train ID Lookup</Card.Title>
+                <Card.Text>
+                Discover how terribly late or amazingly on time your train is!
+                </Card.Text>
+                <SearchBarTrain></SearchBarTrain>
+            </Card.Body>
+        </Card>
+        </div>
         <Container fluid >
             <Row style = {{justifyContent:"center"}} >
                 {busCards}
