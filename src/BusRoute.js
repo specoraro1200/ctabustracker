@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card'
 import "./style.css";
 import { Prev } from 'react-bootstrap/esm/PageItem';
 import {API, Auth} from 'aws-amplify'
+import ReactLoading from "react-loading";
 
 function BusRoute() {
   const{id} = useParams()
@@ -59,7 +60,13 @@ function BusRoute() {
       <Container style = {{paddingTop:"1rem"}}>
 
       <h1>Bus Route {id} Efficiency</h1>
-      {isLoading ? <p>Loading Content</p> :
+      {true ? <div >
+                <p style={{textAlign:"center"}}>Loading Content</p> 
+                {/* <div >
+                  <ReactLoading style={{margin:"auto",width:"13"}}   type="spin" color="#0000FF"  />
+                </div> */}
+              </div>
+      :
         <div class = "root">
           <ProgressBar >
             <ProgressBar animated variant="danger" now={reverseBusRouteEfficiency} label={`${reverseBusRouteEfficiency}%`}  />
