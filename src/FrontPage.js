@@ -5,6 +5,7 @@ import {API, Auth} from 'aws-amplify'
 import Nav from 'react-bootstrap/Nav';
 import { useState } from "react";
 import { responsivePropType } from "react-bootstrap/esm/createUtilityClasses";
+import { useForm } from "react-hook-form";
 
 function FrontPage() {
     var [cta,setCTA] = useState(2);
@@ -20,48 +21,16 @@ useEffect(() =>{
     fetchAPI()
 })
 
-const SearchBarBus = () => (
-    <form onSubmit={getBusAPI}>
-        <input
-            type="text"
-            id="header-search"
-            placeholder="Search Bus ID"
-            name="s" 
-            onChange={(e) => setBusID(e.target.value) }
-        />
-        <input
-            type="text"
-            id="header-search"
-            placeholder="Optional: Route ID"
-            name="s" 
-            onChange={(e) => setRouteID(e.target.value)}
-
-        />
-        <button type="submit">Search</button>
-    </form>
-);
-
 const getBusAPI = async (event) =>{
     event.preventDefault()
     try{
         const store = await API.get('busAPI','/searchBus', {'queryStringParameters': 
         {'busID': busID,"routeID":routeID}})
+        console.log(store)
     }catch(error){
         console.log(error)
     }
 };
-
-const SearchBarTrain = () => (
-    <form action="/" method="get">
-        <input
-            type="text"
-            id="header-search"
-            placeholder="Search Train ID"
-            name="s" 
-        />
-        <button type="submit">Search</button>
-    </form>
-);
 
 const elements = []
 var routes = cta
@@ -99,14 +68,30 @@ return (
     <div>
         <div  style={{display:"flex",flexDirection:"row",flexWrap:"nowrap",justifyContent:"center",marginTop:"1rem",marginBottom:"1rem"}}>
         <Card >
-
             <Card.Body>
                 <img src={require("./bus1.png")}></img>
                 <Card.Title>Bus ID Lookup</Card.Title>
                 <Card.Text>
                 Discover how terribly late or amazingly on-time your bus is!
                 </Card.Text>
-                <SearchBarBus></SearchBarBus>
+                <form onSubmit={getBusAPI}>
+                    <input
+                        type="text"
+                        id="header-search"
+                        placeholder="Search Bus ID"
+                        name="s" 
+                        onChange={(e) => setBusID(e.target.value) }
+                    />
+                    <input
+                        type="text"
+                        id="header-search"
+                        placeholder="Optional: Route ID"
+                        name="s" 
+                        onChange={(e) => setRouteID(e.target.value)}
+
+                    />
+                    <button type="submit">Search</button>
+                </form>
             </Card.Body>
         </Card>
         <Card>
@@ -116,7 +101,15 @@ return (
                 <Card.Text>
                 Discover how terribly late or amazingly on-time your train is!
                 </Card.Text>
-                <SearchBarTrain></SearchBarTrain>
+                <form action="/" method="get">
+                    <input
+                        type="text"
+                        id="header-search"
+                        placeholder="Search Train ID"
+                        name="s" 
+                    />
+                    <button type="submit">Search</button>
+                </form>
             </Card.Body>
         </Card>
         </div>
