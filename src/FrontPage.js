@@ -1,102 +1,101 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Button, Card, Container, Row } from 'react-bootstrap'
 import { Route, Routes } from 'react-router-dom';
 import {API, Auth} from 'aws-amplify'
 import Nav from 'react-bootstrap/Nav';
+import { useState } from "react";
+import { responsivePropType } from "react-bootstrap/esm/createUtilityClasses";
 
-export default class FrontPage extends React.Component {
-constructor(props){
-    super(props);
-    this.state = {
-        cta: null,
-    };
-}
+function FrontPage() {
+    var [cta,setCTA] = useState(2);
+    var [busID,setBusID] = useState(null);
+    var [routeID,setRouteID] = useState(null);
+    var [vehicleList,setVehicleList] = useState(null);
 
-async componentDidMount() {
-    try{
-        const data = await (API.get('busAPI','/'))
-        console.log(data)
-        this.setState({
-            cta: data,
-        });
+useEffect(() =>{
+    async function fetchAPI(){
+        var store = await (API.get('busAPI','/'))
+        setCTA(store)
     }
-    catch(error){
+    fetchAPI()
+})
+
+const SearchBarBus = () => (
+    <form onSubmit={getBusAPI}>
+        <input
+            type="text"
+            id="header-search"
+            placeholder="Search Bus ID"
+            name="s" 
+            onChange={(e) => setBusID(e.target.value) }
+        />
+        <input
+            type="text"
+            id="header-search"
+            placeholder="Optional: Route ID"
+            name="s" 
+            onChange={(e) => setRouteID(e.target.value)}
+
+        />
+        <button type="submit">Search</button>
+    </form>
+);
+
+const getBusAPI = async (event) =>{
+    event.preventDefault()
+    try{
+        const store = await API.get('busAPI','/searchBus', {'queryStringParameters': 
+        {'busID': busID,"routeID":routeID}})
+    }catch(error){
         console.log(error)
     }
+};
+
+const SearchBarTrain = () => (
+    <form action="/" method="get">
+        <input
+            type="text"
+            id="header-search"
+            placeholder="Search Train ID"
+            name="s" 
+        />
+        <button type="submit">Search</button>
+    </form>
+);
+
+const elements = []
+var routes = cta
+if(cta){
+    for(var i = 0; i < cta.length; i++){
+        elements.push([routes[i].url,routes[i].vid,routes[i].name])
+    }
+}
+const busCards = []
+for (const [index, value] of elements.entries()) {
+    //   items.push(<li key={index}>{value}</li>)
+    var busRouteNumber = "/BusRoute/" + value[1]
+    var source = "https://www.transitchicago.com" + value[0]
+    busCards.push(
+    <Card key = {value[1]}  style={{ width: '18rem' }}>
+        <a href = {busRouteNumber} >
+            <Card.Img href = {busRouteNumber} variant="top" src= {source} height="130"/>
+        </a>   
+        <Card.Body>
+            <Card.Title>
+            <Routes>
+                <Route path="/BusRoute/:id" element={value[1]}/>
+            </Routes>
+                <a href = {busRouteNumber} >{value[1]} {value[2]}</a>   
+            </Card.Title>
+            <Card.Text>
+            </Card.Text>
+            {/* <a href = "/BusRoute" >Route</a> */}
+        </Card.Body>
+    </Card>)
 }
 
-// getDelay(){
-//     fetch(
-//         "http://localhost:3000/delay")
-//         .then((res) => res.json())
-//         .then((json) => {
-//             console.log(json,33) // Print the google web page.
-//         })
-//         .catch((error) => {
-//             console.error(error);
-//         });
-// }
+return (
 
-render() {
-
-    const SearchBarBus = () => (
-        <form action="/" method="get">
-            <input
-                type="text"
-                id="header-search"
-                placeholder="Search Bus ID"
-                name="s" 
-            />
-            <button type="submit">Search</button>
-        </form>
-    );
-
-    const SearchBarTrain = () => (
-        <form action="/" method="get">
-            <input
-                type="text"
-                id="header-search"
-                placeholder="Search Train ID"
-                name="s" 
-            />
-            <button type="submit">Search</button>
-        </form>
-    );
-
-    const elements = []
-    var routes = this.state.cta
-    console.log(routes)
-    if(this.state.cta){
-        for(var i = 0; i < this.state.cta.length; i++){
-            elements.push([routes[i].url,routes[i].vid,routes[i].name])
-        }
-    }
-    
-    const busCards = []
-    for (const [index, value] of elements.entries()) {
-        //   items.push(<li key={index}>{value}</li>)
-        var busRouteNumber = "/BusRoute/" + value[1]
-        var source = "https://www.transitchicago.com" + value[0]
-        busCards.push(
-        <Card key = {value[1]} ref={this.myRefElement} style={{ width: '18rem' }}>
-            <a href = {busRouteNumber} >
-                <Card.Img href = {busRouteNumber} variant="top" src= {source} height="130"/>
-            </a>   
-            <Card.Body>
-                <Card.Title>
-                <Routes>
-                    <Route path="/BusRoute/:id" element={value[1]}/>
-                </Routes>
-                    <a href = {busRouteNumber} >{value[1]} {value[2]}</a>   
-                </Card.Title>
-                <Card.Text>
-                </Card.Text>
-                {/* <a href = "/BusRoute" >Route</a> */}
-            </Card.Body>
-        </Card>)
-    }
-
-    return (
     <div>
         <div  style={{display:"flex",flexDirection:"row",flexWrap:"nowrap",justifyContent:"center",marginTop:"1rem",marginBottom:"1rem"}}>
         <Card >
@@ -105,7 +104,7 @@ render() {
                 <img src={require("./bus1.png")}></img>
                 <Card.Title>Bus ID Lookup</Card.Title>
                 <Card.Text>
-                Discover how terribly late or amazingly on time your bus is!
+                Discover how terribly late or amazingly on-time your bus is!
                 </Card.Text>
                 <SearchBarBus></SearchBarBus>
             </Card.Body>
@@ -115,7 +114,7 @@ render() {
                 <img src={require("./train2.png")}></img>
                 <Card.Title>Train ID Lookup</Card.Title>
                 <Card.Text>
-                Discover how terribly late or amazingly on time your train is!
+                Discover how terribly late or amazingly on-time your train is!
                 </Card.Text>
                 <SearchBarTrain></SearchBarTrain>
             </Card.Body>
@@ -128,9 +127,9 @@ render() {
         </Container>
     </div>
     )
-  }
+  
 }
-
+export default FrontPage
 //     const elements = ["1 Bronzeville/Union Station","2 Hyde Park Express",
 //     "3 King Drive","4 Cottage Grove - OWL","N5 South Shore Night Bus - OWL",
 //     "6 Jackson Park Express","7 Harrison","8 Halsted","8A South Halsted",
