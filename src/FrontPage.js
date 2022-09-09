@@ -72,7 +72,7 @@ for (const [index, value] of elements.entries()) {
 return (
 
     <html>
-        <div  style={{display:"flex",flexDirection:"row",flexWrap:"wrap",justifyContent:"center",marginTop:"1rem",marginBottom:"1rem",
+        <div  style={{display:"flex",flexDirection:"row",flexWrap:"wrap",justifyContent:"center",paddingTop:"1rem",marginBottom:"1rem",
                       }}>
         <Card style={{border:"1px solid black"}}>
             {/* <div id = "busIDHeader" style={{display:"flex",borderBottom:"1px solid #aaaaaa", marginBottom:"1rem",marginLeft: "0px"}}>

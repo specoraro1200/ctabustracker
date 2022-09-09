@@ -7,6 +7,7 @@ import "./style.css";
 import { Prev } from 'react-bootstrap/esm/PageItem';
 import {API, Auth} from 'aws-amplify'
 import ReactLoading from "react-loading";
+import "./style.css";
 
 function BusRoute() {
   const{id} = useParams()
@@ -56,35 +57,37 @@ function BusRoute() {
   var mostLateBusEfficient = parseFloat(MostLateBus.Efficient).toFixed(1)
   var reverseMostLateBus = (100-mostLateBusEfficient).toFixed(1)
   return (
-    <div id = "body">
-      <Container style = {{paddingTop:"1rem"}}>
-
-      <h1>Bus Route {id} </h1>
-      {isLoading ? <div >
-                <p style={{textAlign:"center"}}>Loading Content</p> 
-                <div >
-                  <ReactLoading style={{margin:"auto",width:"30px"}}   type="spin" color="#0000FF"  />
-                </div>
-              </div>
-      :
-        <div class = "root">
-          <ProgressBar >
-            <ProgressBar animated variant="danger" now={reverseBusRouteEfficiency} label={`${reverseBusRouteEfficiency}%`}  />
-            <ProgressBar animated variant="success" now={busRouteEfficiency} label={`${busRouteEfficiency}%`} />
-          </ProgressBar>
-          <Card style={{ width: '75%' ,margin:"auto",marginTop:"1rem",padding:"1rem",paddingBottom:"1rem"}}> 
-            <Card.Title style={{fontSize:"30px"}}>Award for Most Late Bus</Card.Title>
-              <h3>Bus ID:  {MostLateBus.vid}</h3>
-              <ProgressBar>
-                <ProgressBar animated variant="danger" now={reverseMostLateBus} label={`${reverseMostLateBus}%`}  />
-                <ProgressBar animated variant="success" now={mostLateBusEfficient} label={`${mostLateBusEfficient}%`}  />
-              </ProgressBar>
-          </Card>   
-        </div>
+    <html>
+      <div style={{width:"auto",padding:"2rem"}}>
+        <div style = {{paddingTop:"1rem"}}>
+        <h1>Bus Route {id} </h1>
+        {isLoading ? 
+          <div >
+            <p style={{textAlign:"center"}}>Loading Content</p> 
+            <div >
+              <ReactLoading style={{margin:"auto",width:"30px"}}   type="spin" color="#0000FF"  />
+            </div>
+          </div>
+          :
+          <div >
+            <ProgressBar >
+              <ProgressBar animated variant="danger" now={reverseBusRouteEfficiency} label={`${reverseBusRouteEfficiency}%`}  />
+              <ProgressBar animated variant="success" now={busRouteEfficiency} label={`${busRouteEfficiency}%`} />
+            </ProgressBar>
+            <Card style={{ width: '100%' ,margin:"auto",marginTop:"1rem",padding:"1rem",paddingBottom:"1rem"}}> 
+              <Card.Title style={{fontSize:"30px"}}>Award for Most Late Bus</Card.Title>
+                <h3>Bus ID:  {MostLateBus.vid}</h3>
+                <ProgressBar>
+                  <ProgressBar animated variant="danger" now={reverseMostLateBus} label={`${reverseMostLateBus}%`}  />
+                  <ProgressBar animated variant="success" now={mostLateBusEfficient} label={`${mostLateBusEfficient}%`}  />
+                </ProgressBar>
+            </Card>   
+          </div>
         }
-      </Container>
+        </div>
 
-    </div>
+      </div>
+    </html>
   );
 }
 

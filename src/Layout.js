@@ -9,7 +9,7 @@ class Layout extends React.Component {
   render() {
     return (
       <html>
-        <Navbar bg="blue" expand="lg">
+        <Navbar  variant="dark" style={{ backgroundColor:"#18447b",height:"4.5rem"}}expand="lg">
           <Container>
             <Navbar.Brand href="/">CTA Delay Tracker</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />

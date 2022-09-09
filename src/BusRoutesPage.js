@@ -47,7 +47,7 @@ for (const [index, value] of elements.entries()) {
             <Routes>
                 <Route path="/BusRoute/:id" element={value[1]}/>
             </Routes>
-                <a href = {busRouteNumber} >{value[1]} {value[2]}</a>   
+                <a style={{color:"black"}}href = {busRouteNumber} >{value[1]} {value[2]}</a>   
             </Card.Title>
             <Card.Text>
             </Card.Text>
