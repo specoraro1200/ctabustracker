@@ -2,6 +2,7 @@ import './App.css';
 import FrontPage from './FrontPage';
 import Layout from './Layout';
 import BusRoute from './BusRoute';
+import BusRoutesPage from './BusRoutesPage'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter } from 'react-router-dom' 
 import React from "react"
@@ -26,6 +27,7 @@ class App extends React.Component {
           <Routes>
             <Route path="*" element={<FrontPage/>}/>
             <Route path="/BusRoute/:id" element={<BusRoute/>}/>
+            <Route path="/BusRoutesPage" element={<BusRoutesPage/>}/>
           </Routes>
           <script src="https://unpkg.com/react/umd/react.production.min.js" crossorigin></script>
           <script src="https://unpkg.com/react-dom/umd/react-dom.production.min.js" crossorigin></script>

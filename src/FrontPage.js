@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { Button, Card, Container, Row } from 'react-bootstrap'
 import { Route, Routes } from 'react-router-dom';
 import {API, Auth} from 'aws-amplify'
-import Nav from 'react-bootstrap/Nav';
+import {Nav,Tab,Tabs} from 'react-bootstrap';
 import { useState } from "react";
 import { responsivePropType } from "react-bootstrap/esm/createUtilityClasses";
 import { useForm } from "react-hook-form";
@@ -12,13 +12,15 @@ function FrontPage() {
     var [busID,setBusID] = useState(null);
     var [routeID,setRouteID] = useState(null);
     var [vehicleList,setVehicleList] = useState(null);
+    var [searchedBus,setSearchedBus] = useState(null);
+    var [noBusSearch,setNoBusSearch] = useState(true);
 
 useEffect(() =>{
-    async function fetchAPI(){
-        var store = await (API.get('busAPI','/'))
-        setCTA(store)
-    }
-    fetchAPI()
+    // async function fetchAPI(){
+    //     var store = await (API.get('busAPI','/'))
+    //     setCTA(store)
+    // }
+    // fetchAPI()
 })
 
 const getBusAPI = async (event) =>{
@@ -26,6 +28,9 @@ const getBusAPI = async (event) =>{
     try{
         const store = await API.get('busAPI','/searchBus', {'queryStringParameters': 
         {'busID': busID,"routeID":routeID}})
+        console.log(store[0]["Delay"])
+        setNoBusSearch(false)
+        setSearchedBus((((store[0]["NoDelay"])/(store[0]["Delay"]+store[0]["NoDelay"]))*100).toFixed(2))
         console.log(store)
     }catch(error){
         console.log(error)
@@ -39,6 +44,7 @@ if(cta){
         elements.push([routes[i].url,routes[i].vid,routes[i].name])
     }
 }
+
 const busCards = []
 for (const [index, value] of elements.entries()) {
     //   items.push(<li key={index}>{value}</li>)
@@ -65,60 +71,68 @@ for (const [index, value] of elements.entries()) {
 
 return (
 
-    <div>
-        <div  style={{display:"flex",flexDirection:"row",flexWrap:"nowrap",justifyContent:"center",marginTop:"1rem",marginBottom:"1rem"}}>
-        <Card >
-            <Card.Body>
-                <img src={require("./bus1.png")}></img>
-                <Card.Title>Bus ID Lookup</Card.Title>
-                <Card.Text>
-                Discover how terribly late or amazingly on-time your bus is!
-                </Card.Text>
-                <form onSubmit={getBusAPI}>
-                    <input
-                        type="text"
-                        id="header-search"
-                        placeholder="Search Bus ID"
-                        name="s" 
-                        onChange={(e) => setBusID(e.target.value) }
-                    />
-                    <input
-                        type="text"
-                        id="header-search"
-                        placeholder="Optional: Route ID"
-                        name="s" 
-                        onChange={(e) => setRouteID(e.target.value)}
+    <html>
+        <div  style={{display:"flex",flexDirection:"row",flexWrap:"wrap",justifyContent:"center",marginTop:"1rem",marginBottom:"1rem",
+                      }}>
+        <Card style={{border:"1px solid black"}}>
+            {/* <div id = "busIDHeader" style={{display:"flex",borderBottom:"1px solid #aaaaaa", marginBottom:"1rem",marginLeft: "0px"}}>
+                <button >Train</button>
+            </div> */}
+            <Tabs defaultActiveKey="first" style={{marginBottom:"1rem"}}>
+                <Tab eventKey="first" title="Bus">
+                    <img src={require("./bus1.png")}></img>
+                    <div style={{padding:"1rem"}}>
+                        <Card.Title>Bus ID Lookup</Card.Title>
+                        <Card.Text>Discover how terribly late or amazingly on-time your bus is!</Card.Text>
+                        <form onSubmit={getBusAPI}>
+                            <input
+                                type="text"
+                                id="header-search"
+                                placeholder="Bus ID"
+                                name="s" 
+                                size = "15" 
+                                onChange={(e) => setBusID(e.target.value) }
+                            />
+                            <input
+                                type="text"
+                                id="header-search"
+                                placeholder="Route ID"
+                                name="s"
+                                size = "15" 
+                                onChange={(e) => setRouteID(e.target.value)}
+                            />
+                            
+                            <button style={{marginBottom:"1rem"}} type="submit">Search</button>
+                        </form>
+                        {noBusSearch ? <div></div>: <div>On-Time Percentage is {searchedBus}% </div> }
 
-                    />
-                    <button type="submit">Search</button>
-                </form>
-            </Card.Body>
+                    </div>
+
+                </Tab>
+                <Tab eventKey="second" title="Train">
+                    <div style={{padding:"1rem"}}>
+                        <img src={require("./train2.png")}></img>
+                        <Card.Title>Train ID Lookup</Card.Title>
+                        <Card.Text>
+                        Discover how terribly late or amazingly on-time your train is!
+                        </Card.Text>
+                        <form action="/" method="get">
+                            <input
+                                type="text"
+                                id="header-search"
+                                placeholder="Train ID"
+                                name="s" 
+                            />
+                            <button style={{marginBottom:"1rem"}} type="submit">Search</button>
+                        </form>
+                    </div>
+                </Tab>
+            </Tabs>
         </Card>
-        <Card>
-            <Card.Body>
-                <img src={require("./train2.png")}></img>
-                <Card.Title>Train ID Lookup</Card.Title>
-                <Card.Text>
-                Discover how terribly late or amazingly on-time your train is!
-                </Card.Text>
-                <form action="/" method="get">
-                    <input
-                        type="text"
-                        id="header-search"
-                        placeholder="Search Train ID"
-                        name="s" 
-                    />
-                    <button type="submit">Search</button>
-                </form>
-            </Card.Body>
-        </Card>
+
         </div>
-        <Container fluid >
-            <Row style = {{justifyContent:"center"}} >
-                {busCards}
-            </Row>
-        </Container>
-    </div>
+
+    </html>
     )
   
 }

@@ -59,12 +59,12 @@ function BusRoute() {
     <div id = "body">
       <Container style = {{paddingTop:"1rem"}}>
 
-      <h1>Bus Route {id} Efficiency</h1>
-      {true ? <div >
+      <h1>Bus Route {id} </h1>
+      {isLoading ? <div >
                 <p style={{textAlign:"center"}}>Loading Content</p> 
-                {/* <div >
-                  <ReactLoading style={{margin:"auto",width:"13"}}   type="spin" color="#0000FF"  />
-                </div> */}
+                <div >
+                  <ReactLoading style={{margin:"auto",width:"30px"}}   type="spin" color="#0000FF"  />
+                </div>
               </div>
       :
         <div class = "root">
@@ -74,7 +74,7 @@ function BusRoute() {
           </ProgressBar>
           <Card style={{ width: '75%' ,margin:"auto",marginTop:"1rem",padding:"1rem",paddingBottom:"1rem"}}> 
             <Card.Title style={{fontSize:"30px"}}>Award for Most Late Bus</Card.Title>
-              <h3>ID# {MostLateBus.vid}</h3>
+              <h3>Bus ID:  {MostLateBus.vid}</h3>
               <ProgressBar>
                 <ProgressBar animated variant="danger" now={reverseMostLateBus} label={`${reverseMostLateBus}%`}  />
                 <ProgressBar animated variant="success" now={mostLateBusEfficient} label={`${mostLateBusEfficient}%`}  />
